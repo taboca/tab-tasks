@@ -32,9 +32,13 @@ function launch_tabs_snapshot() {
     browser.tabs.onUpdated.removeListener(listener);
 
     var views = browser.extension.getViews({type:'tab'});
+
     for (var i = 0; i < views.length; i++) {
       var view = views[i];
       if (view.location.href == viewTabUrl) {
+
+        view.createFlow();
+        
         for (var i = 0; i < list.length; i++) {
               let item = list[i];
 
