@@ -9,6 +9,12 @@
     "default_icon": "icon.png",
     "default_title": "Tabs Meeting"
   },
+  "commands": {
+    "toggle-feature": {
+      "suggested_key": { "default": "Ctrl+Shift+S" },
+      "description": "Send a 'toggle-feature' event to the extension"
+    }
+  },
   "permissions": [
     "tabs",
     "<all_urls>",

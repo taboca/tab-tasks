@@ -5,7 +5,7 @@ var id = 100;
    https://github.com/mdn/webextensions-examples/blob/master/find-across-tabs/background.js
 */
 
-browser.browserAction.onClicked.addListener(function(e) {
+function launch_tabs_snapshot() {
 
   let viewTabUrl = browser.extension.getURL('tabsview.html?id=' + id++);
 
@@ -60,4 +60,18 @@ browser.browserAction.onClicked.addListener(function(e) {
     targetId = tab.id;
   });
 
+}
+
+browser.browserAction.onClicked.addListener(function(e) {
+  launch_tabs_snapshot();
+});
+
+/**
+ * Fired when a registered command is activated using a keyboard shortcut.
+ *
+ * In this sample extension, there is only one registered command: "Ctrl+Shift+U".
+ * On Mac, this command will automatically be converted to "Command+Shift+U".
+ */
+browser.commands.onCommand.addListener((command) => {
+  launch_tabs_snapshot();
 });
