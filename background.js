@@ -1,5 +1,5 @@
-
-var id = 100;
+let currentFlow = null;
+let targetId    = null;
 
 /* This shows a means to exclude the current
    https://github.com/mdn/webextensions-examples/blob/master/find-across-tabs/background.js
@@ -7,7 +7,8 @@ var id = 100;
 
 function launch_tabs_snapshot() {
 
-  let viewTabUrl = browser.extension.getURL('tabsview.html?id=' + id++);
+  //let viewTabUrl = browser.extension.getURL('tabsview.html?id=' + id++);
+  let viewTabUrl = browser.extension.getURL('tabsview.html');
 
   let list = [];
   let cc=0;
@@ -22,7 +23,6 @@ function launch_tabs_snapshot() {
    }
   });
 
-  var targetId = null;
 
   browser.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
 
@@ -37,8 +37,10 @@ function launch_tabs_snapshot() {
       var view = views[i];
       if (view.location.href == viewTabUrl) {
 
-        view.createFlow();
-        
+        currentFlow = view.createFlow();
+
+        console.log("Flow id:" + currentFlow);
+
         for (var i = 0; i < list.length; i++) {
               let item = list[i];
 
@@ -79,3 +81,13 @@ browser.browserAction.onClicked.addListener(function(e) {
 browser.commands.onCommand.addListener((command) => {
   launch_tabs_snapshot();
 });
+
+/* Messaging system */
+
+function handleMessage(request, sender, sendResponse) {
+  console.log("Message from the content script: " +
+    request.flow_id);
+  sendResponse({response: "Response from background script"});
+}
+
+browser.runtime.onMessage.addListener(handleMessage);

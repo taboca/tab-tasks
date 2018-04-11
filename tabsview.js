@@ -14,10 +14,15 @@ function createFlow() {
   pp.setAttribute('style','text-align:right');
   var dd = document.createElement('a');
   dd.innerHTML='Save group';
-  dd.setAttribute('href','saveGroup()');
+
+  dd.setAttribute('href','javascript:return false');
+  dd.addEventListener('click', function (e) {
+      saveGroup();
+  },false);
   pp.appendChild(dd);
   theDiv.appendChild(pp);
 
+  return gCurrentFlow;
 }
 
 function setTabsTitle(id, title, link) {
@@ -38,4 +43,21 @@ function setTabsTitle(id, title, link) {
 
   theDiv.appendChild(pp);
 
+}
+
+/* Sending message to the background main script */
+
+function handleResponse(message) {
+  console.log(`Message from the background script:  ${message.response}`);
+}
+
+function handleError(error) {
+  console.log(`Error: ${error}`);
+}
+
+function saveGroup() {
+  var sending = browser.runtime.sendMessage({
+    flow_id: gCurrentFlow
+  });
+  sending.then(handleResponse, handleError);
 }
